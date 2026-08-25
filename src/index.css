@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Cinzel', 'Georgia', serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --color-gold: #e0b458;
+  --color-gold-soft: #f2d491;
+  --color-ink: #0b1020;
+  --color-panel: #111a2e;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Soft vignette over the 3D world */
+.vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(5, 8, 18, 0.55) 100%);
+}
+
+/* Panel look shared by HUD cards and modals */
+.rpg-panel {
+  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 28%, transparent);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
+.skill-bar-fill {
+  transition: width 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float {
+  animation: float-y 3s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 400ms ease-out both;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-rise-in {
+  animation: rise-in 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Print: only the plain CV */
+@media print {
+  body {
+    overflow: visible;
+    background: white;
+  }
+  #root > *:not(.plain-cv-root) {
+    display: none !important;
+  }
+  .plain-cv-root {
+    position: static !important;
+    overflow: visible !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
