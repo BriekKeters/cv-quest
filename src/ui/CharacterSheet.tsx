@@ -33,39 +33,40 @@ export function CharacterSheet() {
 
   return (
     <div
-      className="animate-fade-in fixed inset-0 z-40 overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-8"
+      className="animate-fade-in fixed inset-0 z-40 flex items-center justify-center bg-black/60 p-3 backdrop-blur-sm sm:p-8"
       onClick={() => setSheetOpen(false)}
     >
       <div
-        className="rpg-panel animate-rise-in mx-auto max-w-4xl rounded-2xl p-6 text-slate-100 sm:p-8"
+        className="rpg-panel animate-rise-in flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl text-slate-100 supports-[height:100dvh]:max-h-[92dvh]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* header */}
-        <div className="flex flex-wrap items-center gap-4 border-b border-white/10 pb-6">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/15 font-display text-2xl font-bold text-gold">
+        {/* header stays put so the close button is always reachable */}
+        <div className="flex shrink-0 items-center gap-4 border-b border-white/10 px-5 py-4 sm:px-8 sm:py-5">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gold/15 font-display text-xl font-bold text-gold sm:h-16 sm:w-16 sm:text-2xl">
             {PROFILE.initials}
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">
+            <h2 className="font-display text-xl font-bold text-white sm:text-3xl">
               {PROFILE.name}
             </h2>
-            <p className="text-sm font-semibold text-gold">{PROFILE.tagline[lang]}</p>
-            <p className="mt-1 text-xs text-slate-400">
-              {PROFILE.email} · {PROFILE.phone} · {PROFILE.location[lang]}
-            </p>
+            <p className="text-xs font-semibold text-gold sm:text-sm">{PROFILE.tagline[lang]}</p>
           </div>
           <button
             onClick={() => setSheetOpen(false)}
             aria-label={UI.close[lang]}
-            className="cursor-pointer self-start rounded-lg px-2.5 py-1 text-xl text-slate-400 transition hover:bg-white/10 hover:text-white"
+            className="-mr-2.5 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center self-start rounded-lg text-lg leading-none text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             ✕
           </button>
         </div>
 
-        <p className="mt-5 text-sm leading-relaxed text-slate-300">{PROFILE.summary[lang]}</p>
+        <div className="overflow-y-auto overscroll-contain px-5 py-5 sm:px-8">
+          <p className="text-xs text-slate-400">
+            {PROFILE.email} · {PROFILE.phone} · {PROFILE.location[lang]}
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-slate-300">{PROFILE.summary[lang]}</p>
 
-        <div className="mt-7 grid gap-8 md:grid-cols-5">
+          <div className="mt-7 grid gap-8 md:grid-cols-5">
           {/* left column */}
           <div className="space-y-8 md:col-span-2">
             <section>
@@ -217,17 +218,18 @@ export function CharacterSheet() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-5">
-          <button
-            onClick={() => {
-              setSheetOpen(false)
-              setCvOpen(true)
-            }}
-            className="cursor-pointer rounded-lg border border-gold/40 bg-gold/10 px-4 py-2 text-xs font-bold text-gold transition hover:bg-gold/20"
-          >
-            {UI.plainCv[lang]} / {UI.print[lang]}
-          </button>
-          <p className="text-[11px] text-slate-500">{UI.madeWith[lang]}</p>
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-5">
+            <button
+              onClick={() => {
+                setSheetOpen(false)
+                setCvOpen(true)
+              }}
+              className="cursor-pointer rounded-lg border border-gold/40 bg-gold/10 px-4 py-2 text-xs font-bold text-gold transition hover:bg-gold/20"
+            >
+              {UI.plainCv[lang]} / {UI.print[lang]}
+            </button>
+            <p className="text-[11px] text-slate-500">{UI.madeWith[lang]}</p>
+          </div>
         </div>
       </div>
     </div>

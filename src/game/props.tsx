@@ -1,8 +1,8 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Billboard, Text } from '@react-three/drei'
-import { Group, MathUtils, Mesh } from 'three'
-import type { ZoneDef } from './zones'
+import { Group, MathUtils, Mesh, Shape } from 'three'
+import { ZONES, type ZoneDef } from './zones'
 import { ZONE_LABELS } from '../data/cv'
 import { useGame } from '../state/store'
 import { CAM_OFFSET } from './Player'
@@ -800,51 +800,45 @@ function Mailbox() {
   )
 }
 
+// Flat arrow painted on the grass, pointing at the first quest.
+const ARROW_SHAPE = (() => {
+  const s = new Shape()
+  s.moveTo(2.0, 0) // tip
+  s.lineTo(0.6, 1.15) // head, one side
+  s.lineTo(0.6, 0.42)
+  s.lineTo(-2.0, 0.42) // shaft
+  s.lineTo(-2.0, -0.42)
+  s.lineTo(0.6, -0.42)
+  s.lineTo(0.6, -1.15) // head, other side
+  s.closePath()
+  return s
+})()
+
+const ARROW_POS = { x: -5.5, z: 11 }
+
 export function SpawnSign() {
   const lang = useGame((s) => s.lang)
+  const howest = ZONES.find((z) => z.id === 'howest')!
+  // aim the arrow's local +x axis at Howest
+  const yaw = Math.atan2(-(howest.z - ARROW_POS.z), howest.x - ARROW_POS.x)
+
   return (
-    <group position={[-3.2, 0, 11.5]} rotation-y={0.2}>
-      <mesh castShadow position-y={1.1}>
-        <cylinderGeometry args={[0.09, 0.12, 2.2, 8]} />
-        <meshStandardMaterial color="#6b4a2f" />
+    <group position={[ARROW_POS.x, 0, ARROW_POS.z]} rotation-y={yaw}>
+      <mesh rotation-x={-Math.PI / 2} position-y={0.03}>
+        <shapeGeometry args={[ARROW_SHAPE]} />
+        <meshStandardMaterial color="#e0b458" />
       </mesh>
-      {/* top board: arrow pointing west toward Howest, the first quest */}
-      <group position={[0, 1.85, 0.14]}>
-        <mesh castShadow>
-          <boxGeometry args={[1.9, 0.52, 0.09]} />
-          <meshStandardMaterial color="#c99a5b" />
-        </mesh>
-        <mesh castShadow position={[-1.15, 0, 0]} rotation-z={Math.PI / 2}>
-          <coneGeometry args={[0.34, 0.5, 4]} />
-          <meshStandardMaterial color="#c99a5b" flatShading />
-        </mesh>
+      <Billboard position={[0, 1.5, 0]} rotation-y={-yaw}>
         <Text
-          position={[0, 0, 0.06]}
-          fontSize={0.3}
-          color="#3b2a1a"
-          anchorX="center"
+          fontSize={0.72}
+          color="#ffffff"
+          outlineWidth={0.05}
+          outlineColor="#0b1020"
           anchorY="middle"
-          fontWeight="bold"
         >
           {lang === 'nl' ? 'Start hier' : 'Start here'}
         </Text>
-      </group>
-      {/* lower board: where the path leads */}
-      <group position={[0, 1.28, 0.14]}>
-        <mesh castShadow>
-          <boxGeometry args={[1.7, 0.42, 0.09]} />
-          <meshStandardMaterial color="#b4834b" />
-        </mesh>
-        <Text
-          position={[0, 0, 0.06]}
-          fontSize={0.21}
-          color="#3b2a1a"
-          anchorX="center"
-          anchorY="middle"
-        >
-          Howest · 2018
-        </Text>
-      </group>
+      </Billboard>
     </group>
   )
 }
