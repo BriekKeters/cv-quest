@@ -1,8 +1,8 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Billboard, Text } from '@react-three/drei'
-import { Group, MathUtils, Mesh, Shape } from 'three'
-import { ZONES, type ZoneDef } from './zones'
+import { Group, MathUtils, Mesh, Vector3 } from 'three'
+import type { ZoneDef } from './zones'
 import { ZONE_LABELS } from '../data/cv'
 import { useGame } from '../state/store'
 import { CAM_OFFSET } from './Player'
@@ -46,12 +46,18 @@ function FloatingInfo({
 
 /* ---------- shared bits ---------- */
 
+const markerWorldPos = new Vector3()
+
 function QuestMarker({ visited, y = 7 }: { visited: boolean; y?: number }) {
   const group = useRef<Group>(null)
   useFrame((state) => {
-    if (group.current) {
-      group.current.position.y = y + Math.sin(state.clock.elapsedTime * 2.2) * 0.25
-    }
+    const g = group.current
+    if (!g) return
+    g.position.y = y + Math.sin(state.clock.elapsedTime * 2.2) * 0.25
+    // the chase camera can pass right through a marker; hide it rather than
+    // letting it balloon across the screen
+    g.getWorldPosition(markerWorldPos)
+    g.visible = state.camera.position.distanceTo(markerWorldPos) > 7
   })
   return (
     <group ref={group} position-y={y}>
@@ -800,45 +806,67 @@ function Mailbox() {
   )
 }
 
-// Flat arrow painted on the grass, pointing at the first quest.
-const ARROW_SHAPE = (() => {
-  const s = new Shape()
-  s.moveTo(2.0, 0) // tip
-  s.lineTo(0.6, 1.15) // head, one side
-  s.lineTo(0.6, 0.42)
-  s.lineTo(-2.0, 0.42) // shaft
-  s.lineTo(-2.0, -0.42)
-  s.lineTo(0.6, -0.42)
-  s.lineTo(0.6, -1.15) // head, other side
-  s.closePath()
-  return s
-})()
-
-const ARROW_POS = { x: -5.5, z: 11 }
+/**
+ * Flat triangular arrowhead for the signpost: a 3-sided prism the same
+ * depth as the board, so it reads as a triangle head-on rather than as a
+ * pyramid. Nested groups keep the two rotations independent of Euler order:
+ * the inner one lays the prism's axis along Z, the outer aims the tip at -X.
+ */
+function SignArrowHead({ color }: { color: string }) {
+  return (
+    <group rotation-z={-Math.PI / 2}>
+      <mesh castShadow rotation-x={Math.PI / 2}>
+        <cylinderGeometry args={[0.33, 0.33, 0.09, 3]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+    </group>
+  )
+}
 
 export function SpawnSign() {
   const lang = useGame((s) => s.lang)
-  const howest = ZONES.find((z) => z.id === 'howest')!
-  // aim the arrow's local +x axis at Howest
-  const yaw = Math.atan2(-(howest.z - ARROW_POS.z), howest.x - ARROW_POS.x)
-
   return (
-    <group position={[ARROW_POS.x, 0, ARROW_POS.z]} rotation-y={yaw}>
-      <mesh rotation-x={-Math.PI / 2} position-y={0.03}>
-        <shapeGeometry args={[ARROW_SHAPE]} />
-        <meshStandardMaterial color="#e0b458" />
+    <group position={[-3.2, 0, 11.5]} rotation-y={0.2}>
+      <mesh castShadow position-y={1.1}>
+        <cylinderGeometry args={[0.09, 0.12, 2.2, 8]} />
+        <meshStandardMaterial color="#6b4a2f" />
       </mesh>
-      <Billboard position={[0, 1.5, 0]} rotation-y={-yaw}>
+      {/* top board: points west toward Howest, the first quest */}
+      <group position={[0, 1.85, 0.14]}>
+        <mesh castShadow>
+          <boxGeometry args={[1.9, 0.52, 0.09]} />
+          <meshStandardMaterial color="#c99a5b" />
+        </mesh>
+        <group position={[-1.11, 0, 0]}>
+          <SignArrowHead color="#c99a5b" />
+        </group>
         <Text
-          fontSize={0.72}
-          color="#ffffff"
-          outlineWidth={0.05}
-          outlineColor="#0b1020"
+          position={[0, 0, 0.06]}
+          fontSize={0.3}
+          color="#3b2a1a"
+          anchorX="center"
           anchorY="middle"
+          fontWeight="bold"
         >
           {lang === 'nl' ? 'Start hier' : 'Start here'}
         </Text>
-      </Billboard>
+      </group>
+      {/* lower board: where the path leads */}
+      <group position={[0, 1.28, 0.14]}>
+        <mesh castShadow>
+          <boxGeometry args={[1.7, 0.42, 0.09]} />
+          <meshStandardMaterial color="#b4834b" />
+        </mesh>
+        <Text
+          position={[0, 0, 0.06]}
+          fontSize={0.21}
+          color="#3b2a1a"
+          anchorX="center"
+          anchorY="middle"
+        >
+          Howest · 2018
+        </Text>
+      </group>
     </group>
   )
 }
