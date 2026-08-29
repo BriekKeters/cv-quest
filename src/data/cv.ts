@@ -140,13 +140,13 @@ export const QUESTS: Quest[] = [
     bullets: {
       nl: [
         'Foto- en videografie met Adobe, DaVinci Resolve en OBS — portfolio op briekketers.com.',
-        'WebAR-ervaringen gebouwd in 8th Wall, van concept tot code.',
+        'WebAR in 8th Wall, o.a. voor de campagne ‘Zie Ons Doen’ van de Vlaamse overheid.',
         'Bouwt eigen apps waar beide werelden samenkomen, zoals Cull: AI-fotoculling voor Mac & iPad.',
         'Creativiteit en techniek, één skill tree.',
       ],
       en: [
         'Photography and videography with Adobe, DaVinci Resolve and OBS — portfolio at briekketers.com.',
-        'Built WebAR experiences in 8th Wall, from concept to code.',
+        'WebAR in 8th Wall, including the Flemish government’s ‘Zie Ons Doen’ campaign.',
         'Builds apps where both worlds meet, like Cull: AI photo culling for Mac & iPad.',
         'Creativity and engineering, one skill tree.',
       ],
@@ -261,6 +261,15 @@ export const PROJECTS: Project[] = [
       en: 'This very website — an open-world CV built with React, TypeScript and Three.js (React Three Fiber). You are playing it right now.',
     },
     tags: ['React', 'Three.js', 'TypeScript'],
+  },
+  {
+    name: 'Zie Ons Doen — WebAR',
+    url: 'https://www.instagram.com/p/C3FlgnuIzMJ/',
+    desc: {
+      nl: 'WebAR-ervaring voor de Vlaamse overheid, voor de publiekscampagne rond het Belgisch EU-voorzitterschap 2024. Ik schreef de code, gebouwd in 8th Wall.',
+      en: 'WebAR experience for the Flemish government, part of the public campaign around Belgium’s 2024 EU Council presidency. I wrote the code, built in 8th Wall.',
+    },
+    tags: ['8th Wall', 'WebAR', 'Vlaamse overheid'],
   },
   {
     name: 'Cull',
