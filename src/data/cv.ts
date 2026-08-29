@@ -140,11 +140,13 @@ export const QUESTS: Quest[] = [
     bullets: {
       nl: [
         'Foto- en videografie met Adobe, DaVinci Resolve en OBS — portfolio op briekketers.com.',
+        'WebAR-ervaringen gebouwd in 8th Wall, van concept tot code.',
         'Bouwt eigen apps waar beide werelden samenkomen, zoals Cull: AI-fotoculling voor Mac & iPad.',
         'Creativiteit en techniek, één skill tree.',
       ],
       en: [
         'Photography and videography with Adobe, DaVinci Resolve and OBS — portfolio at briekketers.com.',
+        'Built WebAR experiences in 8th Wall, from concept to code.',
         'Builds apps where both worlds meet, like Cull: AI photo culling for Mac & iPad.',
         'Creativity and engineering, one skill tree.',
       ],
@@ -303,6 +305,7 @@ export const SECONDARY_SKILLS = [
   'Unreal Engine (C++ & Blueprints)',
   'Unity / Godot',
   'Blender',
+  'WebAR (8th Wall)',
   '.NET / C#',
   'Spring Boot',
   'Docker',
