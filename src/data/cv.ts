@@ -266,10 +266,10 @@ export const PROJECTS: Project[] = [
     name: 'Zie Ons Doen — WebAR',
     url: 'https://www.instagram.com/p/C3FlgnuIzMJ/',
     desc: {
-      nl: 'WebAR-ervaring voor de Vlaamse overheid, voor de publiekscampagne rond het Belgisch EU-voorzitterschap 2024. Ik schreef de code, gebouwd in 8th Wall.',
-      en: 'WebAR experience for the Flemish government, part of the public campaign around Belgium’s 2024 EU Council presidency. I wrote the code, built in 8th Wall.',
+      nl: 'WebAR voor de Vlaamse overheid, in de campagne rond het Belgisch EU-voorzitterschap 2024. Straatstickers met QR-code in 13 centrumsteden lieten een animatie boven het voetpad zweven — rechtstreeks in de browser, zonder app. Ik schreef de code, in 8th Wall.',
+      en: 'WebAR for the Flemish government’s campaign around Belgium’s 2024 EU Council presidency. QR-coded street stickers across 13 cities made an animation float above the pavement, straight in the browser with no app. I wrote the code, in 8th Wall.',
     },
-    tags: ['8th Wall', 'WebAR', 'Vlaamse overheid'],
+    tags: ['8th Wall', 'WebAR', 'Vlaamse overheid', '13 centrumsteden'],
   },
   {
     name: 'Cull',
