@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { Lang, ZoneId } from '../data/cv'
+import { track } from '../analytics'
 
 interface GameState {
   lang: Lang
@@ -31,15 +32,26 @@ export const useGame = create<GameState>((set) => ({
     typeof window !== 'undefined' &&
     ('ontouchstart' in window || navigator.maxTouchPoints > 0),
   setLang: (lang) => set({ lang }),
-  enterWorld: () => set({ screen: 'world', sheetOpen: false, cvOpen: false }),
-  setSheetOpen: (sheetOpen) => set({ sheetOpen }),
-  setCvOpen: (cvOpen) => set({ cvOpen }),
+  enterWorld: () => {
+    track('enter-world')
+    set({ screen: 'world', sheetOpen: false, cvOpen: false })
+  },
+  setSheetOpen: (sheetOpen) => {
+    if (sheetOpen) track('open-character-sheet')
+    set({ sheetOpen })
+  },
+  setCvOpen: (cvOpen) => {
+    if (cvOpen) track('open-plain-cv')
+    set({ cvOpen })
+  },
   setNearZone: (nearZone) => set({ nearZone }),
-  openZone: (id) =>
+  openZone: (id) => {
+    track(`zone-${id}`)
     set((s) => ({
       activeZone: id,
       visited: s.visited.includes(id) ? s.visited : [...s.visited, id],
-    })),
+    }))
+  },
   closeZone: () => set({ activeZone: null }),
 }))
 

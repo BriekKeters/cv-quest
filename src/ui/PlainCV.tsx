@@ -9,6 +9,7 @@ import {
   UI,
 } from '../data/cv'
 import { useGame } from '../state/store'
+import { track, trackProject } from '../analytics'
 
 export function PlainCV() {
   const lang = useGame((s) => s.lang)
@@ -29,7 +30,10 @@ export function PlainCV() {
           ← {UI.back[lang]}
         </button>
         <button
-          onClick={() => window.print()}
+          onClick={() => {
+            track('print-cv')
+            window.print()
+          }}
           className="cursor-pointer rounded-lg bg-slate-900 px-5 py-2 text-sm font-bold text-white transition hover:bg-slate-700"
         >
           🖨 {UI.print[lang]}
@@ -122,6 +126,7 @@ export function PlainCV() {
                 {p.url && (
                   <a
                     href={p.url}
+                    onClick={() => trackProject(p.name)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs font-semibold text-blue-700 underline"

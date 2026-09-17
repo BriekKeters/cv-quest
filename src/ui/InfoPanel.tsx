@@ -9,6 +9,7 @@ import {
 } from '../data/cv'
 import { ZONES } from '../game/zones'
 import { useGame } from '../state/store'
+import { track, trackProject } from '../analytics'
 
 const KIND_STYLES: Record<QuestKind, string> = {
   main: 'bg-amber-400/15 text-amber-300 border-amber-400/40',
@@ -116,6 +117,7 @@ export function InfoPanel() {
               <a
                 key={p.name}
                 href={p.url}
+                onClick={() => trackProject(p.name)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${cardClass} hover:border-gold/40 hover:bg-white/10`}
@@ -165,12 +167,14 @@ export function InfoPanel() {
         <div className="mt-4 space-y-2.5 text-sm">
           <a
             href={`mailto:${PROFILE.email}`}
+            onClick={() => track('contact-email')}
             className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 font-semibold text-slate-100 transition hover:border-gold/40 hover:bg-white/10"
           >
             ✉️ {PROFILE.email}
           </a>
           <a
             href={`tel:${PROFILE.phone.replace(/\s/g, '')}`}
+            onClick={() => track('contact-phone')}
             className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 font-semibold text-slate-100 transition hover:border-gold/40 hover:bg-white/10"
           >
             📞 {PROFILE.phone}

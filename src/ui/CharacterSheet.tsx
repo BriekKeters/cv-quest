@@ -10,6 +10,7 @@ import {
   type QuestKind,
 } from '../data/cv'
 import { useGame } from '../state/store'
+import { trackProject } from '../analytics'
 
 const KIND_DOT: Record<QuestKind, string> = {
   main: 'bg-amber-400',
@@ -201,6 +202,7 @@ export function CharacterSheet() {
                     <a
                       key={p.name}
                       href={p.url}
+                      onClick={() => trackProject(p.name)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`${cardClass} hover:border-gold/40 hover:bg-white/10`}
